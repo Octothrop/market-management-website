@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
-from database import insert_db, get_db
+from database import insert_db
+from database import get_db
 from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
-db_string = "mysql+pymysql://2wryslf0i0hc0nn252pi:pscale_pw_1uQUgepC8G5ZSQj5VVCqSJ6Bcy7lPkCzpBYtBmSNI5K@aws.connect.psdb.cloud/test_flask?charset=utf8mb4"
+db_string = "mysql+pymysql://6dodeptmo0rbxmzr2qms:pscale_pw_6UHZHXqyci9GtuVL38R7l7tJxmIcOihvuxtv9heGRVB@aws.connect.psdb.cloud/test_flask?charset=utf8mb4"
 
 engine = create_engine(
     db_string,
@@ -49,6 +50,7 @@ def register_form():
   password = data.get('rp')
   confirm_password = data.get('crp')
   phone_number = data.get('ph')
+    
 
   with engine.connect() as conn:
             result = conn.execute(text("SELECT * FROM User WHERE username = :user"),
@@ -67,17 +69,17 @@ def register_form():
 
             if existing_phone_number:
                  return render_template('register.html', message="Phone number already exists", s=True)
+
+  
   insert_db()
   return render_template('login.html')
 
 @app.route("/login_form", methods=['POST'])
 def loform():
-  all = get_db()
-  if all :
-    return render_template('login.html', success=False)
-  else:
+  if get_db() == True:
     return render_template('home.html', success=True)
-
+  else :
+    return render_template('login.html', success=False)
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", debug=True)

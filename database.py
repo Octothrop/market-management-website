@@ -1,9 +1,8 @@
 from sqlalchemy import create_engine, text
 from flask import request, jsonify, render_template
-import json
-import hashlib
+import json, re, hashlib
 
-db_string = "mysql+pymysql://2wryslf0i0hc0nn252pi:pscale_pw_1uQUgepC8G5ZSQj5VVCqSJ6Bcy7lPkCzpBYtBmSNI5K@aws.connect.psdb.cloud/test_flask?charset=utf8mb4"
+db_string = "mysql+pymysql://6dodeptmo0rbxmzr2qms:pscale_pw_6UHZHXqyci9GtuVL38R7l7tJxmIcOihvuxtv9heGRVB@aws.connect.psdb.cloud/test_flask?charset=utf8mb4"
 
 engine = create_engine(
     db_string,
@@ -13,6 +12,9 @@ engine = create_engine(
         }
     }
 )
+
+
+
 
 def get_db():
   data1 = request.form
@@ -24,8 +26,11 @@ def get_db():
         ps=z,
         ur=data1.get('ur')
     )
-    return (result)
-
+  if result.fetchall() == []:
+      return False
+  else:
+      return True
+ 
 
 def insert_db():
     data = request.form
