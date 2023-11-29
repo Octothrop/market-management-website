@@ -21,7 +21,7 @@ def get_db():
   req = data1.get('rp')
   z = hashlib.sha256(req.encode('utf-8')).hexdigest()
   with engine.connect() as conn:
-    result = conn.execute(text("SELECT * FROM User WHERE username = :user and password_hash = :ps and user_role = :ur"),
+    result = conn.execute(text("SELECT * FROM USER WHERE username = :user and upassword = :ps and urole = :ur"),
         user=data1.get('ru'),
         ps=z,
         ur=data1.get('ur')
@@ -38,15 +38,29 @@ def insert_db():
 
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
     with engine.connect() as conn:
-      conn.execute(text("INSERT INTO User (first_name, last_name, username, password_hash, phone_number, user_role) "
-               "VALUES (:fn, :ln, :ru, :rp, :ph, :ur)"),
+      result1 = conn.execute(text("SELECT count(*) FROM USER"))
+      count_result = result1.fetchone()[0]
+      idn = int(count_result)+1
+      id = "AFGH"+str(idn)
+      conn.execute(text("INSERT INTO USER (userid, uname, username, ulocation, uphone, urole, upassword) "
+               "VALUES (:id, :fn, :ru, :location, :ph, :ur, :rp)"),
+          id = id,
           fn=data.get('fn'),
-          ln=data.get('ln'),
           ru=data.get('ru'),
           rp=hashed_password,
+          location = data.get('location'),
           ph=data.get('ph'),
           ur=data.get('ur')
       );
+
+def get_user_id(username):
+  with engine.connect() as conn:
+      result = conn.execute(text("SELECT userid FROM USER WHERE username = :user"), user=username)
+      user_data = result.fetchone()
+      if user_data:
+          return user_data.userid
+      else:
+          return None
 
 
 

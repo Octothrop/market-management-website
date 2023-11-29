@@ -5,10 +5,10 @@
   <title>Home</title>
   <style>
     .header {
-      background-image: url('https://images8.alphacoders.com/378/thumb-1920-378627.jpg') ;
+      background-image: url('https://wallpapercave.com/wp/wp12396645.jpg') ;
       background-size: cover;
       background-attachment: fixed;
-      height: 850px;
+      height: 650px;
       background-position: center;
 
     }
@@ -44,18 +44,18 @@
       margin-left: 10px;
       border-color: rgb(0, 0, 0);
       font-family: 'Cascadia Code';
-      color: rgb(0, 0, 0);
-      font-size: 14px;
+      color:#FFF8DC;
+      font-size: 17px;
+      text-decoration: none;
     }
 
     .button {
       background-color: transparent;
-      transition: transform 0.5s ease-in-out;
     }
 
     .button:hover {
       transform: scale(1.05);
-      color: rgb(106, 106, 106);
+      color:  #F0F8FF;
     }
 
     .menu_tabs {
@@ -69,21 +69,25 @@
     .tabs {
       float: right;
       padding: 10px;
-      color: rgb(45, 46, 46);
+      color: #FFF8DC;
       margin-top: 10px;
       text-decoration: none;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Cascadia Code', sans-serif;
       font-weight: 400;
 
     }
 
     .tabs:hover {
-      color: rgb(96, 99, 92);
+      color: #F0F8FF;
       transform: scale(1.05);
     }
     .headw{
-      font-size: 95px;
+      font-size: 195px;
       text-align: right;
+      font-family: 'Cascadia Code';
+      align-self: text-bottom;
+      color: #F5F5DC80;   
+      margin-top:375px;
     }
 
     span{
@@ -182,6 +186,29 @@
       align-items: center;
       justify-content: center;
     }
+    .count-container {
+      font-family: 'Cascadia Code';
+      text-align: right;
+      height: 200px;
+    }
+
+    .count {
+        margin-bottom: 80px;
+        font-size: 150px;
+        color: #2F4F4F;
+        font-weight: bold;
+        padding: 20px;
+        border: transparent;
+        display: inline-block;
+        margin: 10px;
+        transition: color 0.5s ease-in-out;
+    }
+
+    .para{
+      text-align: left;
+      font-size: 40px;
+      margin-top : 80px;
+    }
 
   </style>
   <script href="home_script.js"></script>
@@ -191,19 +218,19 @@
 <body>
   <div class="header">
     <div class="menu-tabs">
-      <img class="log" src="https://market-management-website--paipananya28.repl.co/static/logo.png" alt="My Logo">
-      <a class="button" href='\login'> Login/Register </a>
-      <a class="tabs" href="#">Contact Us</a>
-      <a class="tabs" href="#">Services</a>
-      <a class="tabs" href="#">Home</a>
+      <img class="log" src="https://market-management-website--paipananya28.repl.co/static/logo1.png" alt="My Logo">
+      <a class="button" href="{{ url_for('profile', username=username) }}">Profile</a>
+
+      <a class="tabs" href="#">History</a>
+      <a class="tabs" href="{{ url_for('connection', username = username) }}">Connections</a>
+      <a class="tabs" href="{{ url_for('sales', username = username) }}">Sales</a>
     </div>
     <p class="headw"> FARMER</p>
   </div>
-  <div>
-    <div>
-    </div>
+  <div class="count-container">
+    <p class=para>Registered<br> Framers</p>
+      <p id="farmerCount" class="count">0</p>
   </div>
-
       <div class="page-content">
        <p> Any <span>  Queries ?</span> &#x2193;</p>
 
@@ -235,6 +262,29 @@
           </div>
         </div>
       </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countElement = document.getElementById('farmerCount');
+
+        function updateCount() {
+            fetch('/get_farmer_count')
+                .then(response => response.json())
+                .then(data => {
+                    countElement.textContent = data.count;
+                    if (data.count <= 100) {
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        countElement.style.color = '#e74c3c'; 
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        updateCount();
+    });
+
+
+  </script>
 </body>
 
 </html>

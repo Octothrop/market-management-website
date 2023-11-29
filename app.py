@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, jsonify
 from database import insert_db
-from database import get_db
+from database import get_db, get_user_id
 from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
@@ -15,6 +15,8 @@ engine = create_engine(
     }
 )
 
+app.secret_key = 'your_secret_key'
+
 @app.route("/")
 def home_test():
   return render_template("home.html")
@@ -27,17 +29,6 @@ def redirect_test():
 def register():
     return render_template('register.html')
 
-@app.route("/reg_email", methods=['GET'])
-def reg_email():
-  d = request.form
-  em = d.get('txtb')
-  print(em)
-  if em !=  None:
-    with engine.connect() as conn:
-       result = conn.execute(text("INSERT INTO EBOX (email)"
-                                 "(VALUES (:em)"),
-           em=em)
-  return render_template("home.html")
   
 @app.route("/login")
 def login():
@@ -53,7 +44,7 @@ def register_form():
     
 
   with engine.connect() as conn:
-            result = conn.execute(text("SELECT * FROM User WHERE username = :user"),
+            result = conn.execute(text("SELECT * FROM USER WHERE username = :user"),
                                 user=username)
             existing_user = result.fetchone()
 
@@ -63,7 +54,7 @@ def register_form():
             if password != confirm_password:
                 return render_template('register.html', message="Passwords do not match", s=True)
 
-            result1 = conn.execute(text("SELECT * FROM User WHERE phone_number = :ph"),
+            result1 = conn.execute(text("SELECT * FROM USER WHERE uphone = :ph"),
                                 ph=phone_number)
             existing_phone_number = result1.fetchone()
 
@@ -76,10 +67,112 @@ def register_form():
 
 @app.route("/login_form", methods=['POST'])
 def loform():
+  role = request.form.get('ur')
+  uname = request.form.get('ru')
+  
   if get_db() == True:
-    return render_template('home.html', success=True)
+    return render_template(f'{role}.html',success=True, username = uname)
   else :
     return render_template('login.html', success=False)
+
+@app.route('/profile/<string:username>')
+def profile(username):
+    uname1 = username
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM USER WHERE username = :user"), user=uname1)
+        print(result)
+        user_profile = result.fetchone()
+        print(user_profile)
+    return render_template('profile.html', user_profile = user_profile, username = username)
+
+@app.route('/connection/<string:username>')
+def connection(username):
+    uname2 = username
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT U.username, U.urole FROM USER U WHERE U.userid IN (SELECT C.Suid FROM CONNECTION C WHERE C.Muid IN (SELECT X.userid FROM USER X WHERE X.username = :user)) "), user=uname2)
+        print(result)
+        user_connection = result.fetchall()
+    print(user_connection)
+    return render_template('connection.html', connection = user_connection, username = uname2)
+
+@app.route('/returner/<string:username>')
+def returner(username):
+  unamer = username
+  with engine.connect() as conn:
+      result = conn.execute(text("SELECT U.urole FROM USER U WHERE U.username = :user"), user=unamer)
+      ugetrole = result.fetchone()
+
+  roler = ugetrole.urole
+  print(roler)
+  return render_template(f'{roler}.html', username=unamer)
+
+@app.route('/sales/<string:username>')
+def sales(username):
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM CROP"))
+        crops = result.fetchall()
+        result1 = conn.execute(text("SELECT S.cropid, C.cname, S.sqty, S.sprice FROM SALES S JOIN CROP C ON S.cropid = C.cropID WHERE S.suid = (SELECT U.userid FROM USER U WHERE U.username = :username)"), username=username)
+        sales_data = result1.fetchall()
+
+    return render_template('sales.html', crops=crops, username = username, sales_data=sales_data)
+
+@app.route('/submit_sales/<string:username>', methods=['POST'])
+def submit_sales(username):
+    crop_id = request.form.get('crop')
+    quantity = request.form.get('quantity')
+    price = request.form.get('price')
+    seller_uid = get_user_id(username)
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT COUNT(*) FROM SALES"))
+        count_result = result.fetchone()[0]
+        sid = f"s{count_result + 1}"
+       
+    with engine.connect() as conn:
+        conn.execute(text("INSERT INTO SALES (sid, cropid, sqty, sprice, suid) "
+                          "VALUES (:sid, :cropid, :sqty, :sprice, :suid)"),
+                     sid=sid, cropid=crop_id, sqty=quantity, sprice=price, suid=seller_uid)
+        result = conn.execute(text("SELECT * FROM CROP"))
+        crops = result.fetchall()
+        result1 = conn.execute(text("SELECT S.cropid, C.cname, S.sqty, S.sprice FROM SALES S JOIN CROP C ON S.cropid = C.cropID WHERE S.suid = (SELECT U.userid FROM USER U WHERE U.username = :username)"), username=username)
+        sales_data = result1.fetchall()
+
+        return render_template('sales.html', crops=crops, username = username, sales_data=sales_data)
+
+@app.route('/get_farmer_count')
+def get_farmer_count():
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT COUNT(*) FROM USER WHERE urole ='farmer'"))
+        count = result.scalar()
+        print(count)
+
+    return jsonify({'count': count})
+
+
+"""
+@app.route('/history/<string:username>')
+def profile(username): 
+    uname3 = username
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM USER WHERE username = :user"), user=uname3)
+        print(result)
+        user_profile = result.fetchone()
+        print(user_profile)
+    return render_template('profile.html', user_profile = user_profile)
+
+@app.route('/inventory/<string:username>')
+def profile(username):
+    uname4 = username
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM USER WHERE username = :user"), user=uname4)
+        print(result)
+        user_profile = result.fetchone()
+        print(user_profile)
+    return render_template('profile.html', user_profile = user_profile)"""
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return render_template('home.html')
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", debug=True)

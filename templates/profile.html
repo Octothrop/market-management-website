@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+
+    <h1>User Profile</h1>
+
+    <p>Username: {{ user_profile.username }}</p>
+    <p>Location: {{ user_profile.ulocation }}</p>
+    <p>Phone: {{ user_profile.uphone }}</p>
+    <a href="{{ url_for('connection', username = username) }}">connections</a>
+    <a href="{{ url_for('sales', username = username) }}">Sales</a>
+    <a href="#">History</a>
+   <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
