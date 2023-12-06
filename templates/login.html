@@ -2,9 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-    <title>Login Form</title>
+  <title>Login Form</title>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
@@ -26,7 +24,7 @@
     h1 {
       font-weight: bold;
       margin: 0;
-        align-items: centre;
+      align-items: centre;
     }
 
     p {
@@ -48,7 +46,7 @@
       margin: 15px 0;
     }
 
-   .newsty {
+    .newsty {
       border-radius: 20px;
       border: 1px solid rgba(62, 0, 128, 0.647);
       background-color: rgb(169, 117, 198);
@@ -61,8 +59,8 @@
       transition: transform .5s ease-in;
     }
 
-    .newsty:hover{
-        transform: scale(1.1);
+    .newsty:hover {
+      transform: scale(1.1);
     }
 
     form {
@@ -76,7 +74,8 @@
       text-align: center;
     }
 
-    input, select {
+    input,
+    select {
       background-color: #eeeeeed7;
       border: none;
       padding: 12px 15px;
@@ -86,9 +85,9 @@
     }
 
     .container {
-      background-color: #ffffff ;
+      background-color: #ffffff;
       border-radius: 30px;
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
       position: relative;
       overflow: hidden;
       width: 768px;
@@ -147,33 +146,35 @@
     }
 
     .quote {
-        text-align: center;
-        margin-top: 10px;
-        text-decoration: none;
-      }
+      text-align: center;
+      margin-top: 10px;
+      text-decoration: none;
+    }
 
-      #quote-text {
-        font-size: 20px;
-        font-style: italic;
-        font-family: Marelan;
-      }
+    #quote-text {
+      font-size: 20px;
+      font-style: italic;
+      font-family: Marelan;
+    }
 
     .overlay-right {
       right: 0;
-        font-size: 12px;
+      font-size: 12px;
     }
 
-    .logo{
-        border-radius: 50%;
-        height: 90px;
-        width: 90px;
+    .logo {
+      border-radius: 50%;
+      height: 90px;
+      width: 90px;
     }
-    .line{
-        width:100px;
-        height:10px;
+
+    .line {
+      width: 100px;
+      height: 10px;
     }
-    .alerting{
-      color : red;
+
+    .alerting {
+      color: red;
       font-size: 12px;
       padding: 5px;
     }
@@ -181,97 +182,97 @@
 </head>
 
 <body>
-    <div class="container" id="container">
-        <div class="form-container log-in-container">
-              <form method="POST" action='\login_form' >
+  <div class="container" id="container">
+    <div class="form-container log-in-container">
+      <form method="POST" action='\login_form'>
 
-              <div><img class="logo" src="https://market-management-website--paipananya28.repl.co/static/logo.png" alt="Logo">
-                <h1>Login</h1>
-              </div>
-              <img class="line" src="https://market-management-website--paipananya28.repl.co/static/line.png">
-              <div><br></div>
-              <input type="text" id="ru" name="ru" placeholder="Username" required>
-              <input type="password" id="rp" name="rp" placeholder="Password" required>
-              <select id="ur" name="ur" required>
-                <option value="" disabled selected>Select User Role</option>
-                <option value="farmer">Farmer</option>
-                <option value="trader">Trader</option>
-                <option value="buyer">Buyer</option>
-              </select>
-                <div class="alerting">
-                    {% if success == False %}
-                  Invalid username or password or role
-                    {% endif %}
-                </div>
-              <input type="submit" value="Login" class="newsty"></input>
-                <p>Not registered yet?<a href={{ url_for('register') }}>Register</a></p>
-            </form>
+        <div><img class="logo" src="https://market-management-website--paipananya28.repl.co/static/logo1.png" alt="Logo">
+          <h1>Login</h1>
         </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-right">
-                    <h1>Grow.  Harvest.  Thrive.</h1>
-                    <div class="quote">
-                        <p id="quote-text"></p>
-                      </div>                      
-                </div>
-            </div>
+        <img class="line" src="https://market-management-website--paipananya28.repl.co/static/line.png">
+        <div><br></div>
+        <input type="text" id="ru" name="ru" placeholder="Username" required>
+        <input type="password" id="rp" name="rp" placeholder="Password" required>
+        <select id="ur" name="ur" required>
+          <option value="" disabled selected>Select User Role</option>
+          <option value="farmer">Farmer</option>
+          <option value="agent">Agent</option>
+          <option value="buyer">Buyer</option>
+        </select>
+        <div class="alerting">
+          {% if success == False %}
+          Invalid username or password or role
+          {% endif %}
         </div>
+        <input type="submit" value="Login" class="newsty"></input>
+        <p>Not registered yet?<a href={{ url_for('register') }}>Register</a></p>
+      </form>
     </div>
-    <script>
-      const quotes = [
-        "Plant your seeds with a smile, and watch your garden bloom.",
-        "In the world of farming, every sunrise is a new opportunity for joy.",
-        "A well-tended field is a canvas of happiness for the diligent farmer.",
-        "The best fertilizer for your soul is the smell of fresh earth on a sunny day.",
-        "Happy farmers make happy fields, and happy fields yield bountiful crops.",
-        "Sow your dreams with hope, and they will grow into a fruitful harvest.",
-        "Farming is a dance with nature, and every step is a celebration of life.",
-        "In the garden of life, happiness is the sweetest fruit.",
-        "The beauty of farming lies in the simple joys of planting and harvesting.",
-        "A farmer's day begins with the sun and ends with a sense of accomplishment.",
-        "Tilling the land is like writing a love letter to the Earth.",
-        "In the fields, you reap what you sow; in life, you harvest what you nurture.",
-        "Farming teaches us patience, hard work, and the rewards of persistence.",
-        "The scent of rain on a parched field is the farmer's sweetest perfume.",
-        "A farmer's hands may be calloused, but they hold the seeds of abundance.",
-        "The earth's bounty is a testament to the farmer's dedication.",
-        "The farmer's market is a treasure trove of nature's gifts.",
-        "A farm is a place where every season has its own special charm.",
-        "Crops may wither, but a farmer's spirit remains unyielding.",
-        "The plow turns dreams into reality, one furrow at a time.",
-        "Farming is the art of turning sunlight and soil into nourishment for the world.",
-        "The farmer's smile is as bright as the morning sun.",
-        "In the heart of the farm, you'll find the pulse of life."
-      ];
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-right">
+          <h1>Grow. Harvest. Thrive.</h1>
+          <div class="quote">
+            <p id="quote-text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const quotes = [
+      "Plant your seeds with a smile, and watch your garden bloom.",
+      "In the world of farming, every sunrise is a new opportunity for joy.",
+      "A well-tended field is a canvas of happiness for the diligent farmer.",
+      "The best fertilizer for your soul is the smell of fresh earth on a sunny day.",
+      "Happy farmers make happy fields, and happy fields yield bountiful crops.",
+      "Sow your dreams with hope, and they will grow into a fruitful harvest.",
+      "Farming is a dance with nature, and every step is a celebration of life.",
+      "In the garden of life, happiness is the sweetest fruit.",
+      "The beauty of farming lies in the simple joys of planting and harvesting.",
+      "A farmer's day begins with the sun and ends with a sense of accomplishment.",
+      "Tilling the land is like writing a love letter to the Earth.",
+      "In the fields, you reap what you sow; in life, you harvest what you nurture.",
+      "Farming teaches us patience, hard work, and the rewards of persistence.",
+      "The scent of rain on a parched field is the farmer's sweetest perfume.",
+      "A farmer's hands may be calloused, but they hold the seeds of abundance.",
+      "The earth's bounty is a testament to the farmer's dedication.",
+      "The farmer's market is a treasure trove of nature's gifts.",
+      "A farm is a place where every season has its own special charm.",
+      "Crops may wither, but a farmer's spirit remains unyielding.",
+      "The plow turns dreams into reality, one furrow at a time.",
+      "Farming is the art of turning sunlight and soil into nourishment for the world.",
+      "The farmer's smile is as bright as the morning sun.",
+      "In the heart of the farm, you'll find the pulse of life."
+    ];
 
-      function getRandomQuote() {
-        const index = Math.floor(Math.random() * quotes.length);
-        return quotes[index];
-      }
+    function getRandomQuote() {
+      const index = Math.floor(Math.random() * quotes.length);
+      return quotes[index];
+    }
 
-      function displayQuote() {
-        const quoteText = document.getElementById("quote-text");
-        quoteText.innerHTML = getRandomQuote();
-      }
+    function displayQuote() {
+      const quoteText = document.getElementById("quote-text");
+      quoteText.innerHTML = getRandomQuote();
+    }
 
-      window.onload = displayQuote;
+    window.onload = displayQuote;
 
 
-      function loginUser() {
-        const formData = new FormData(document.getElementById('loginForm'));
-        fetch('/login', {
-          method: 'POST',
-          body: formData,
-        })
-          .then(response => response.json())
-          .then(data => {
+    function loginUser() {
+      const formData = new FormData(document.getElementById('loginForm'));
+      fetch('/login', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
 
-            document.getElementById('message').textContent = data.message;
-          });
-      }
+          document.getElementById('message').textContent = data.message;
+        });
+    }
 
-    </script>
+  </script>
 </body>
 
 </html>

@@ -13,10 +13,19 @@
 
     }
 
+    .headeri {
+      background-image: url('https://images8.alphacoders.com/378/thumb-1920-378627.jpg') ;
+      background-size: cover;
+      background-attachment: fixed;
+      height: 550px;
+      background-position: center;
+
+    }
+
     .log {
       border-radius: 50%;
-      height: 80px;
-      width:80px;
+      height: 100px;
+      width:130px;
       margin-top: 12px;
       margin-left: 12px;
       transition: transform 1.5s ease-out;
@@ -56,6 +65,30 @@
     .button:hover {
       transform: scale(1.05);
       color: rgb(106, 106, 106);
+    }
+
+    .button1 {
+      margin-block-start:200px;
+      background-color: rgb(96, 99, 92);
+      transition: transform 0.5s ease-in-out;
+      float:left;
+      font-size: 30px;
+      padding-top:10px;
+      padding-bottom:10px;
+      padding-left:20px;
+      padding-right:20px;
+      border-radius:15px;
+      font-family: 'Cascadia Code';
+      color: white;
+      text-decoration: none;
+      border-color:rgb(96, 99, 92);
+    }
+
+    .button1:hover {
+      transform: scale(1.05);
+      background-color: white;
+      color: rgb(96, 99, 92);
+      border-color:rgb(96, 99, 92);
     }
 
     .menu_tabs {
@@ -182,6 +215,53 @@
       align-items: center;
       justify-content: center;
     }
+    .mainimg{
+      width: 1250px;
+      height: 700px;
+      position:center;
+      margin-left:60px;
+    }
+
+    .section1{
+      height:120px;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+    }
+
+    .tag {
+      margin-right: 10px;    
+        width: 500px;
+        height: 180px;
+        position:center;
+
+    }
+
+    .count-container {
+      display: flex;
+      justify-content: space-around;
+      font-family: 'Cascadia Code';
+      font-size: 30px;
+    }
+
+    .count-item {
+      text-align: center;
+    }
+
+    .name {
+      margin-bottom: 5px;
+      padding-left:30px;
+      font-family: 'Cascadia Code';
+      font-size: 30px;
+    }
+
+
+
+    .tag1{
+      position:center;
+      margin-left:-180px;
+    }
 
   </style>
   <script href="home_script.js"></script>
@@ -197,44 +277,116 @@
       <a class="tabs" href="#">Services</a>
       <a class="tabs" href="#">Home</a>
     </div>
-    <p class="headw"> Market <br><span color="blue">Management </span> <br>Database</p>
+    <p class="headw"> Market <br><span color="red">Management </span> <br>Database</p>
   </div>
   <div>
     <div>
     </div>
   </div>
 
-      <div class="page-content">
-       <p> Any <span>  Queries ?</span> &#x2193;</p>
-
-        </span>
+  <img class="mainimg" src="https://market-management-website--paipananya28.repl.co/static/home_img.png">
+  <div class="container">
+    <img class="tag" src="https://market-management-website--paipananya28.repl.co/static/regist.png">
+    <div class="count-container">
+      <div class="count-item">
+        <p class="name">Farmers</p>
+        <p id="farmerCount" class="count">0</p>
       </div>
 
+      <div class="count-item">
+        <p class="name">Agents</p>
+        <p id="agentCount" class="count">0</p>
+      </div>
+
+      <div class="count-item">
+        <p class="name">Buyers</p>
+        <p id="buyerCount" class="count">0</p>
+      </div>
+      <img class="tag" src="https://market-management-website--paipananya28.repl.co/static/regist.png">
+    </div>
+  </div>
+  <div class="headeri">
+    <div class="menu-tabs">
+      <div class="log"></div>
+      <a class="button1" href='\login'> Login/Register </a>
+    </div>
+    <p class="headw"> Register <br><span color="red">Today </span></p>
+  </div>
+  <div>
+    <div>
+    </div>
+  </div>
+  
+
+  <img class="tag1" src="https://market-management-website--paipananya28.repl.co/static/query.png">
       <footer>
         <div class="footer-container">
-          <div class="left-col">
-            <img src="logo.png" alt="" class="logo">
-            <div class="social-media">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-youtube"></i></a>
-              <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <p class="rights-text">© 2023</b>  All Rights Reserved.</p>
-          </div>
-
           <div class="right-col">
             <h1>Our Support</h1>
             <div class="border"></div>
             <p>Enter Your Email to get further updates.</p>
-            <form action='\reg_email' class="newsletter-form" method='GET'>
+            <form class="newsletter-form" method='GET'>
               <input type="text" class="txtb" name="txtb" placeholder="Enter Your Email">
               <input type="submit" class="btn" value="submit">
             </form>
           </div>
         </div>
-      </footer>
+      </footer>  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const countElement = document.getElementById('farmerCount');
+
+      function updateCount() {
+          fetch('/get_farmer_count')
+              .then(response => response.json())
+              .then(data => {
+                  countElement.textContent = data.count;
+                  if (data.count <= 100) {
+                      requestAnimationFrame(updateCount);
+                  } else {
+                      countElement.style.color = '#e74c3c'; 
+                  }
+              })
+              .catch(error => console.error('Error:', error));
+      }
+      const countElement1 = document.getElementById('agentCount');
+
+      function updateCount1() {
+          fetch('/get_agent_count')
+              .then(response => response.json())
+              .then(data => {
+                  countElement1.textContent = data.count;
+                  if (data.count <= 100) {
+                      requestAnimationFrame(updateCount1);
+                  } else {
+                      countElement1.style.color = '#e74c3c'; 
+                  }
+              })
+              .catch(error => console.error('Error:', error));
+      }
+
+        updateCount1();
+      const countElement2 = document.getElementById('buyerCount');
+
+      function updateCount2() {
+          fetch('/get_buyer_count')
+              .then(response => response.json())
+              .then(data => {
+                  countElement2.textContent = data.count;
+                  if (data.count <= 100) {
+                      requestAnimationFrame(updateCount2);
+                  } else {
+                      countElement2.style.color = '#e74c3c'; 
+                  }
+              })
+              .catch(error => console.error('Error:', error));
+      }
+
+      updateCount2();
+      updateCount();
+  });
+  </script>
 </body>
 
 </html>
+

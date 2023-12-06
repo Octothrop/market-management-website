@@ -40,7 +40,7 @@ def insert_db():
     with engine.connect() as conn:
       result1 = conn.execute(text("SELECT count(*) FROM USER"))
       count_result = result1.fetchone()[0]
-      idn = int(count_result)+1
+      idn = int(count_result)+2
       id = "AFGH"+str(idn)
       conn.execute(text("INSERT INTO USER (userid, uname, username, ulocation, uphone, urole, upassword) "
                "VALUES (:id, :fn, :ru, :location, :ph, :ur, :rp)"),
