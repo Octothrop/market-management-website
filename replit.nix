@@ -1,5 +1,6 @@
 { pkgs }: {
     deps = [
+      pkgs.python39Packages.conda
       pkgs.inetutils
       pkgs.mailutils
       pkgs.python39Packages.werkzeug
@@ -10,6 +11,7 @@
       pkgs.python39Packages.flask_mail
       pkgs.python39Packages.poetry
       pkgs.python39Packages.pip
-      pkgs.cowsay
+      pkgs.cowsay  
+      pkgs.python39Packages.oauth
     ];
 }

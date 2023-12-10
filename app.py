@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, jsonify
 from database import insert_db
 from database import get_db, get_user_id
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text,engine
 
 
 app = Flask(__name__)
@@ -274,7 +274,7 @@ def buy(username):
         
             if not connected_agents:
                 # No connected agents, you can choose to render a different template or display a message
-                return render_template('na.html', username=current_user, role=ugetrole)
+                return render_template('na.html', username=current_user, role=ugetrole[0])
         
             # Fetch sales data for connected agents' inventory
             result = conn.execute(text("""
@@ -286,11 +286,10 @@ def buy(username):
                 WHERE I.strack IS FALSE AND I.exp >= CURDATE()
                 AND I.suid IN :connected_agents
             """), connected_agents=tuple(connected_agents))
-
-            print(ugetrole)
+        
             sales_data = result.fetchall()
             if sales_data == []:
-              return render_template('na.html', username=current_user, role=ugetrole)
+              return render_template('na.html', username=current_user, role=ugetrole[0])
         
         return render_template('buy.html', username=current_user, sales_data=sales_data, userid = id[0])
 
@@ -303,9 +302,6 @@ def request_sale(username):
     
 
     with engine.connect() as conn:
-
-          result = conn.execute(text("SELECT U.urole FROM USER U WHERE U.username = :user"), user=username)
-          ugetrole = result.fetchone()
           resultx = conn.execute(text("SELECT U.userid FROM USER U WHERE U.username = :user"), user=current_user)
           id = resultx.fetchone()
           # Step 1: Update the strack for the buyer
@@ -321,10 +317,10 @@ def request_sale(username):
               user=current_user
           )
           connected_agents = [row['Suid'] for row in result_agents.fetchall()]
-          print(ugetrole)
+
           if not connected_agents:
               # No connected agents, you can choose to render a different template or display a message
-              return render_template('na.html', username=current_user, role=ugetrole)
+              return render_template('na.html', username=current_user, role=ugetrole[0])
 
           # Fetch sales data for connected agents' inventory
           result = conn.execute(text("""
@@ -339,7 +335,7 @@ def request_sale(username):
 
           sales_data = result.fetchall()
           if sales_data == []:
-            return render_template('na.html', username=current_user, role=ugetrole)
+            return render_template('na.html', username=current_user, role=ugetrole[0])
 
     return render_template('buy.html', username=current_user, sales_data=sales_data, userid = id[0])
 
